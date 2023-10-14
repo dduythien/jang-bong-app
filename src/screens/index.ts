@@ -1,0 +1,10 @@
+export { default as Startup } from './Startup/Startup';
+export { default as Example } from './Example/Example';
+export { default as Setting } from './Setting/Setting';
+export { default as Inverter } from './Inverter/Inverter';
+export { default as InverterRountine } from './InverterRountine/InverterRountine';
+export { default as InverterType } from './InverterType/InverterType';
+export { default as Dashboard } from './Dashboard';
+export { default as Page2 } from './Page2';
+export { default as Page3 } from './Page3';
+export { default as Page4 } from './Page4';
