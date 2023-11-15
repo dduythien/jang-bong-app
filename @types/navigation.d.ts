@@ -1,3 +1,4 @@
+import { Dashboard } from '@/screens';
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 
@@ -16,6 +17,7 @@ export type ApplicationStackParamList = {
   Login: undefined;
   Inverter: NavigatorScreenParams<MainParamsList>;
   InputInverter: undefined;
+  Dashboard: undefined;
 };
 
 export type ApplicationScreenProps =

@@ -1,6 +1,12 @@
-import { Dashboard, Page2, Page3 } from '@/screens';
+import { Dashboard, Page2, Page3, Login } from '@/screens';
 
 const rootStackConfig = {
+  login: {
+    component: Login,
+    options: {
+      gestureEnabled: false,
+    },
+  },
   dashboard: {
     component: Dashboard,
     options: {

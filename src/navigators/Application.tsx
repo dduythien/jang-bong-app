@@ -22,9 +22,13 @@ const ApplicationNavigator = () => {
   return (
     <SafeAreaView style={[Layout.fill, { backgroundColor: colors.card }]}>
       <NavigationContainer theme={NavigationTheme} ref={navigationRef}>
-        <StatusBar barStyle={darkMode ? 'light-content' : 'dark-content'} />
-          {/* <InitNavigatorStack /> */}
-          <NavigatorStack />
+        <StatusBar
+          barStyle="light-content"
+          translucent
+          backgroundColor="transparent"
+        />
+        <SafeAreaView style={{ backgroundColor: '#d31145', flex: 0 }} />
+        <NavigatorStack />
       </NavigationContainer>
     </SafeAreaView>
   );
