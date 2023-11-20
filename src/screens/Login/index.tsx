@@ -35,16 +35,19 @@ const LoginScreen = ({ navigation }: ApplicationScreenProps) => {
         await _storeData(COOKIE_NAMES.ACCESS_TOKEN, accessToken);
         await _storeData(COOKIE_NAMES.REFRESH_TOKEN, refreshToken);
         await _storeData(COOKIE_NAMES.USER_ID, userId);
-        navigation.replace('Dashboard');
+        // navigation.replace('Dashboard');
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Dashboard' }],
+        });
       },
     },
   );
-  const onSubmit = async data => {
-    console.log('zxczxc');
-    console.log(data);
-    // await runAsync()
+  const onSubmit = async (data: any) => {
+    // console.log(data);
+    await runAsync(data);
   };
-  console.log('adkad');
+  // console.log('adkad');
   return (
     <>
       <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -71,11 +74,12 @@ const LoginScreen = ({ navigation }: ApplicationScreenProps) => {
           <View style={styles.formConstainer}>
             <Controller
               control={control}
-              name="username"
+              name="userName"
               render={({ field: { onChange, value, ...rest } }) => (
                 <Input
                   {...rest}
                   value={value}
+                  autoCapitalize="none"
                   label="Tên đăng nhập"
                   name="username"
                   onChange={onChange}
@@ -96,7 +100,7 @@ const LoginScreen = ({ navigation }: ApplicationScreenProps) => {
                 />
               )}
             />
-            <Button title="Đăng nhập" onPress={() => console.log('click')} />
+            <Button title="Đăng nhập" onPress={onSubmit} />
           </View>
         </KeyboardAwareScrollView>
       </SafeAreaView>

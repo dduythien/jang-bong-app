@@ -7,7 +7,7 @@ const rootStackConfig = {
       gestureEnabled: false,
     },
   },
-  dashboard: {
+  Dashboard: {
     component: Dashboard,
     options: {
       gestureEnabled: false,

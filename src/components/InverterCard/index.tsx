@@ -42,7 +42,7 @@ const InverterCard = (props: IInveterProps) => {
     <View style={[styles.container, Gutters.tinyBMargin]}>
       <TouchableOpacity onPress={() => onClick(info.inverterId || '')}>
         <View style={[Gutters.tinyPadding]}>
-          <Text style={[Fonts.textTiny, Fonts.textLight]}>Thoong so</Text>
+          <Text style={[Fonts.textTiny, Fonts.textLight]}>Thông số</Text>
         </View>
         <View style={styles.divider} />
         <View style={[Gutters.tinyPadding]}>

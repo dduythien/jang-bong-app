@@ -1,5 +1,11 @@
 import React from 'react';
-import { Setting, Inverter, Startup, InverterRountine, InverterType } from '../screens';
+import {
+  Setting,
+  Inverter,
+  Startup,
+  InverterRountine,
+  InverterType,
+} from '../screens';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -11,8 +17,7 @@ const Tab = createBottomTabNavigator();
 const InverterNavigatorStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-            
-            <Stack.Screen
+      <Stack.Screen
         name="InverterType"
         component={InverterType}
         options={{ title: 'My home' }}

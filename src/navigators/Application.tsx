@@ -28,7 +28,8 @@ const ApplicationNavigator = () => {
           backgroundColor="transparent"
         />
         <SafeAreaView style={{ backgroundColor: '#d31145', flex: 0 }} />
-        <NavigatorStack />
+        {/* <NavigatorStack /> */}
+        <InitNavigatorStack />
       </NavigationContainer>
     </SafeAreaView>
   );
