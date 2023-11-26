@@ -4,7 +4,8 @@ import {
 } from '@gorhom/bottom-sheet';
 import React, { useMemo, RefObject } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/AntDesign';
+import Icon2 from 'react-native-vector-icons/FontAwesome6';
 
 export type KeyBoardProps = {
   setValue: (val: string) => void;
@@ -108,7 +109,9 @@ const Keyboard = (props: KeyBoardProps) => {
               }}
             />
             <KeyboardButton
-              title={<Icon style={stylesBtn.icon} name="rocket" size={20} />}
+              title={
+                <Icon2 style={stylesBtn.icon} name="delete-left" size={22} />
+              }
               isIcon
               color="#d8d8d8"
               onPress={deleteValue}
@@ -159,7 +162,7 @@ const Keyboard = (props: KeyBoardProps) => {
             </View>
             <View style={styles.nextRowBtnWrapper}>
               <KeyboardButton
-                title={<Icon style={stylesBtn.icon} name="rocket" size={20} />}
+                title={<Icon style={stylesBtn.icon} name="enter" size={22} />}
                 isIcon
                 color="#d8d8d8"
                 onPress={nextValue}
