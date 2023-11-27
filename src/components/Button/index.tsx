@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Image, StyleSheet, TouchableOpacity, Text } from 'react-native';
-import { useTheme } from '../../hooks';
 
 const Button = props => {
   const { title, onPress, color = '#1D1A39', ...rest } = props;
@@ -21,7 +20,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     textAlign: 'center',
     borderRadius: 16,
-    padding: 4,
   },
   title: {
     color: '#fff',

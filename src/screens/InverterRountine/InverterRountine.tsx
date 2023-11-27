@@ -1,54 +1,47 @@
-import React, {
-  useEffect,
-  useState,
-  useRef,
-  useCallback,
-  useMemo,
-} from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
-  Text,
+  // Text,
   ScrollView,
-  StyleSheet,
   StatusBar,
   SafeAreaView,
-  Button,
+  TouchableWithoutFeedback,
 } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 import {
   BottomSheetModal,
-  BottomSheetModalProvider,
-  BottomSheetBackdrop,
+  // BottomSheetBackdrop,
   // BottomSheet
 } from '@gorhom/bottom-sheet';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import _get from 'lodash/get';
 import { getInverterRoutineService } from '@/services/inverter';
 import { useMount, useRequest } from 'ahooks';
 import dayjs from 'dayjs';
 import { useTheme } from '../../hooks';
-import { InputFloat } from '@/components';
+// import { InputFloat } from '@/components';
 import { MODEL } from '../../../@types/model';
 import { ApplicationScreenProps } from '../../../@types/navigation';
 import { Header } from '@/components';
+import Keyboard from '@/components/Keyboard';
+import LabelTypography from '@/components/LabelTypography';
 
 const InverterRountine = ({ navigation, route }: ApplicationScreenProps) => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
   const form = useForm({});
-  const { control } = form;
+  // const { control, setValue } = form;
   // variables
-  const snapPoints = useMemo(() => ['40%', '50%'], []);
-  const { Fonts, Gutters, Layout } = useTheme();
-  const dispatch = useDispatch();
-  const [hourPicked, setHourPicked] = useState(9);
+  const { Gutters } = useTheme();
+  // const dispatch = useDispatch();
+  const [hourPicked] = useState(9);
+  const [selectedUnit, setSelectedUnit] = useState<string>('');
   const [listUnit, setListUnit] = useState<MODEL.IInverterRountineByUnit[]>([]);
 
-  const { loading, run } = useRequest(
+  const { run } = useRequest(
     (params: MODEL.IQueryRoutine) => getInverterRoutineService(params),
     {
-      onSuccess(data, params) {
+      onSuccess(data) {
         const routine = _get(data, 'data.unitRoutines');
         form.setValue('unitRoutines', routine);
         setListUnit(routine);
@@ -57,17 +50,12 @@ const InverterRountine = ({ navigation, route }: ApplicationScreenProps) => {
     },
   );
 
-  const onOpenPickHour = () => {
-    // bottomSheetModalRef.current?.present();
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'InputInverter' }],
-    });
-  };
-
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index);
-  }, []);
+  // const onOpenPickHour = () => {
+  //   navigation.reset({
+  //     index: 0,
+  //     routes: [{ name: 'InputInverter' }],
+  //   });
+  // };
 
   useMount(() => {
     run({
@@ -76,103 +64,122 @@ const InverterRountine = ({ navigation, route }: ApplicationScreenProps) => {
     });
   });
 
-  const renderBackdrop = useCallback(
-    props => (
-      <BottomSheetBackdrop {...props} opacity={0.5} enableTouchThrough />
-    ),
-    [],
-  );
+  const handleOnFocusUnitRoutine = (id: string) => {
+    setSelectedUnit(id);
+    bottomSheetModalRef.current?.present();
+  };
+
+  const handleSetValue = (val: string) => {
+    const units = listUnit.map(unit => {
+      if (unit.unitId === selectedUnit) {
+        return { ...unit, [`h${hourPicked}`]: unit[`h${hourPicked}`] + val };
+      }
+      return unit;
+    });
+    setListUnit(units);
+  };
+
+  const handleClearValue = () => {
+    const units = listUnit.map(unit => {
+      if (unit.unitId === selectedUnit) {
+        return { ...unit, [`h${hourPicked}`]: '' };
+      }
+      return unit;
+    });
+    setListUnit(units);
+  };
+
+  const handleDeleteValue = () => {
+    const units = listUnit.map(unit => {
+      if (unit.unitId === selectedUnit) {
+        return {
+          ...unit,
+          [`h${hourPicked}`]: unit[`h${hourPicked}`].slice(0, -1),
+        };
+      }
+      return unit;
+    });
+    setListUnit(units);
+  };
+
+  const handleDismiss = () => {
+    const units = listUnit.map(unit => {
+      const checkNumberValid = !!Number(unit[`h${hourPicked}`]);
+      if (unit.unitId === selectedUnit) {
+        return {
+          ...unit,
+          [`h${hourPicked}`]: checkNumberValid ? unit[`h${hourPicked}`] : '',
+        };
+      }
+      return unit;
+    });
+    setListUnit(units);
+    setSelectedUnit('');
+  };
+
+  const handleNextValue = () => {
+    let idx = 0;
+    const units = listUnit.map((unit, index) => {
+      const checkNumberValid = !!Number(unit[`h${hourPicked}`]);
+      if (unit.unitId === selectedUnit) {
+        idx = index === listUnit.length - 1 ? 0 : index + 1;
+        return {
+          ...unit,
+          [`h${hourPicked}`]: checkNumberValid ? unit[`h${hourPicked}`] : '',
+        };
+      }
+      return unit;
+    });
+    setListUnit(units);
+    setSelectedUnit(listUnit[idx].unitId);
+  };
 
   const { typeFilter, types = [] } = route.params;
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <Header
-        title={'Nhập l'}
-        isHasFirstIconRight
-        iconNameFirstRight="info"
-        onPressBack={() => navigation.navigate('Inverter', {typeFilter, types})}
-      />
-      <SafeAreaView>
-        <ScrollView
-          // style={Layout.fill}
-          contentContainerStyle={[
-            // Layout.fullSize,
-            // Layout.fill,
-            // Layout.colCenter,
-            // Layout.scrollSpaceBetween,
-            Gutters.tinyPadding,
-            // { width: '100%' },
-          ]}
-        >
-          {/* <Button title='zxc' onPress={() => form.setValue('unitRoutines.0.h8', 123123)} />
-          <Button title='zxczxc' onPress={() => console.log(form.getValues())} /> */}
-          {/* <Controller
-                control={control}
-                name={`unitRoutines.0.h8`}
-                render={({ field: { onChange, value, ...rest } }) => (
-                  <InputFloat
-                    {...rest}
-                    value={value}
-                    label={'item.typeName'}
-                    unit={item.unitName}
-                    name={`unitRoutines.0.h8`}
-                    onChange={onChange}
-                  />
-                )}
-              /> */}
-
-          {listUnit.map((item, index) => {
-            return (
-              <Controller
-                control={control}
-                name={`unitRoutines[${index}]h${hourPicked}`}
-                render={({ field: { onChange, value, ...rest } }) => (
-                  <InputFloat
-                    {...rest}
-                    value={value}
-                    label={item.typeName}
-                    unit={item.unitName}
-                    name={`unitRoutines[${index}].h${hourPicked}`}
-                    onChange={onChange}
-                  />
-                )}
-              />
-            );
-          })}
-        </ScrollView>
-        <BottomSheetModalProvider>
-          <BottomSheetModal
-            ref={bottomSheetModalRef}
-            index={1}
-            snapPoints={snapPoints}
-            onChange={handleSheetChanges}
-            // backdropComponent={({ style }) => (
-            //   <View
-            //     style={[style, { backgroundColor: 'rgba(0, 0, 0, 0.5)' }]}
-            //   />
-            // )}
-          >
-            <View style={styles.contentContainer}>
-              <Text>Awesome 🎉</Text>
-            </View>
-          </BottomSheetModal>
-        </BottomSheetModalProvider>
-      </SafeAreaView>
-    </>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        bottomSheetModalRef.current?.close();
+      }}
+    >
+      <View style={{ height: '100%' }}>
+        <StatusBar barStyle="dark-content" />
+        <Header
+          title={'Nhập liệu'}
+          isHasFirstIconRight
+          iconNameFirstRight="info"
+          onPressBack={() =>
+            navigation.navigate('Inverter', { typeFilter, types })
+          }
+        />
+        <SafeAreaView>
+          <ScrollView contentContainerStyle={[Gutters.tinyPadding]}>
+            {listUnit.map((item, index) => {
+              return (
+                <LabelTypography
+                  key={index}
+                  label={item.typeName}
+                  unit={item.unitName}
+                  value={item[`h${hourPicked}`]}
+                  isSelected={item.unitId === selectedUnit}
+                  onPress={() => {
+                    handleOnFocusUnitRoutine(item.unitId);
+                  }}
+                />
+              );
+            })}
+          </ScrollView>
+        </SafeAreaView>
+        <Keyboard
+          bottomSheetModalRef={bottomSheetModalRef}
+          setValue={handleSetValue}
+          deleteValue={handleDeleteValue}
+          clearValue={handleClearValue}
+          nextValue={handleNextValue}
+          onDismiss={handleDismiss}
+        />
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 24,
-    backgroundColor: 'grey',
-  },
-  contentContainer: {
-    flex: 1,
-    alignItems: 'center',
-  },
-});
 
 export default InverterRountine;

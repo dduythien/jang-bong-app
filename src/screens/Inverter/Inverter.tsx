@@ -31,9 +31,7 @@ const Inverter = ({ navigation, route }: ApplicationScreenProps) => {
   });
 
   const listInverter = _get(data, 'data.items', []);
-  console.log('inverter: ', listInverter);
-
- 
+  // console.log('inverter: ', listInverter);
 
   const handleSheetChanges = useCallback((index: number) => {
     console.log('handleSheetChanges', index);
@@ -83,8 +81,12 @@ const Inverter = ({ navigation, route }: ApplicationScreenProps) => {
         ]}
       >
         {filterInverter(listInverter, types, typeFilter).map(
-          (inverterInfo: MODEL.IItemInverter) => (
-            <InverterCard info={inverterInfo} onClick={onSelectInverter} />
+          (inverterInfo: MODEL.IItemInverter, index) => (
+            <InverterCard
+              key={index}
+              info={inverterInfo}
+              onClick={onSelectInverter}
+            />
           ),
         )}
       </ScrollView>

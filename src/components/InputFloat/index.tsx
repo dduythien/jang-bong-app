@@ -30,18 +30,30 @@ const styles = StyleSheet.create({
 });
 
 const InputFloat = (props: any) => {
-  const { unit, onChange, value, label } = props;
+  const {
+    unit,
+    index,
+    onChange,
+    value,
+    label,
+    onFocus,
+    onBlur,
+    keyboardType = 'numeric',
+  } = props;
   return (
     <View style={{ flex: 1, backgroundColor: '#fff', marginBottom: 16 }}>
       <FloatingLabelInput
-        // {...props}
+        {...props}
         label={label}
+        onFocus={onFocus}
+        onBlur={onBlur}
         onChangeText={val => onChange(val)}
         value={value}
         rightComponent={<Text>{unit}</Text>}
-        keyboardType='numeric'
-        returnKeyType='done' 
-        autoFocus={true}
+        keyboardType={keyboardType}
+        showSoftInputOnFocus={false}
+        returnKeyType="done"
+        autoFocus={index === 0}
       />
     </View>
   );
