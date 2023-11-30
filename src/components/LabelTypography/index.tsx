@@ -69,6 +69,7 @@ const LabelTypography = (props: LabelTypographyProps) => {
 
 const styles = StyleSheet.create({
   typoContainer: {
+    height: 50,
     position: 'relative',
     backgroundColor: '#fff',
     borderColor: '#E14032',
