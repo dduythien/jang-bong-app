@@ -6,3 +6,5 @@ export { default as InputFloat } from './InputFloat';
 export { default as Button } from './Button';
 export { default as Input } from './Input';
 export { default as LoadingComponent } from './Loading';
+export { default as Keyboard } from './Keyboard';
+export { default as LabelTypography } from './LabelTypography';

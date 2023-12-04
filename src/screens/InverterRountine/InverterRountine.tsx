@@ -9,25 +9,29 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
-import type { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { useMount, useRequest } from 'ahooks';
 import { useForm } from 'react-hook-form';
 import _get from 'lodash/get';
-import { getInverterRoutineService } from '@/services/inverter';
-import { useMount, useRequest } from 'ahooks';
 import dayjs from 'dayjs';
+
+import type { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { getInverterRoutineService } from '@/services/inverter';
+import { Header, Keyboard, LabelTypography } from '@/components';
+import {
+  LABEL_TYPOGRAPHY_HEIGHT,
+  LABEL_TYPOGRAPHY_MARGIN_BOT,
+} from '@/utils/constants';
+import { handleScrollToElement } from '@/utils/utils';
+
 import { useTheme } from '../../hooks';
 import { MODEL } from '../../../@types/model';
 import { ApplicationScreenProps } from '../../../@types/navigation';
-import { Header } from '@/components';
-import Keyboard from '@/components/Keyboard';
-import LabelTypography from '@/components/LabelTypography';
 
 const InverterRountine = ({ navigation, route }: ApplicationScreenProps) => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const scrollViewRef = useRef<ScrollView>(null);
 
   const form = useForm({});
-  // const { control, setValue } = form;
   // variables
   const { Gutters } = useTheme();
   // const dispatch = useDispatch();
@@ -54,25 +58,34 @@ const InverterRountine = ({ navigation, route }: ApplicationScreenProps) => {
     });
   });
 
-  const handleScrollToFocus = (index: number) => {
-    setTimeout(() => {
-      scrollViewRef.current?.scrollTo({
-        x: 0,
-        y: 66 * index,
-        animated: true,
-      });
-    }, 100);
-  };
-
   const handleOnFocusUnitRoutine = (id: string) => {
+    const units = listUnit.map((unit: MODEL.IInverterRountineByUnit) => {
+      const checkNumberValid = !!Number(
+        unit[`h${hourPicked}` as keyof MODEL.IInverterRountineByUnit],
+      );
+      if (unit.unitId === selectedUnit) {
+        return {
+          ...unit,
+          [`h${hourPicked}`]: checkNumberValid
+            ? unit[`h${hourPicked}` as keyof MODEL.IInverterRountineByUnit]
+            : '',
+        };
+      }
+      return unit;
+    });
+    setListUnit(units);
     setSelectedUnit(id);
     bottomSheetModalRef.current?.present();
   };
 
   const handleSetValue = (val: string) => {
-    const units = listUnit.map(unit => {
+    const units = listUnit.map((unit: MODEL.IInverterRountineByUnit) => {
       if (unit.unitId === selectedUnit) {
-        return { ...unit, [`h${hourPicked}`]: unit[`h${hourPicked}`] + val };
+        return {
+          ...unit,
+          [`h${hourPicked}`]:
+            unit[`h${hourPicked}` as keyof MODEL.IInverterRountineByUnit] + val,
+        };
       }
       return unit;
     });
@@ -90,11 +103,13 @@ const InverterRountine = ({ navigation, route }: ApplicationScreenProps) => {
   };
 
   const handleDeleteValue = () => {
-    const units = listUnit.map(unit => {
+    const units = listUnit.map((unit: MODEL.IInverterRountineByUnit) => {
       if (unit.unitId === selectedUnit) {
         return {
           ...unit,
-          [`h${hourPicked}`]: unit[`h${hourPicked}`].slice(0, -1),
+          [`h${hourPicked}`]: unit[
+            `h${hourPicked}` as keyof MODEL.IInverterRountineByUnit
+          ].slice(0, -1),
         };
       }
       return unit;
@@ -103,12 +118,16 @@ const InverterRountine = ({ navigation, route }: ApplicationScreenProps) => {
   };
 
   const handleDismiss = () => {
-    const units = listUnit.map(unit => {
-      const checkNumberValid = !!Number(unit[`h${hourPicked}`]);
+    const units = listUnit.map((unit: MODEL.IInverterRountineByUnit) => {
+      const checkNumberValid = !!Number(
+        unit[`h${hourPicked}` as keyof MODEL.IInverterRountineByUnit],
+      );
       if (unit.unitId === selectedUnit) {
         return {
           ...unit,
-          [`h${hourPicked}`]: checkNumberValid ? unit[`h${hourPicked}`] : '',
+          [`h${hourPicked}`]: checkNumberValid
+            ? unit[`h${hourPicked}` as keyof MODEL.IInverterRountineByUnit]
+            : '',
         };
       }
       return unit;
@@ -119,20 +138,30 @@ const InverterRountine = ({ navigation, route }: ApplicationScreenProps) => {
 
   const handleNextValue = () => {
     let idx = 0;
-    const units = listUnit.map((unit, index) => {
-      const checkNumberValid = !!Number(unit[`h${hourPicked}`]);
-      if (unit.unitId === selectedUnit) {
-        idx = index === listUnit.length - 1 ? 0 : index + 1;
-        return {
-          ...unit,
-          [`h${hourPicked}`]: checkNumberValid ? unit[`h${hourPicked}`] : '',
-        };
-      }
-      return unit;
-    });
+    const units = listUnit.map(
+      (unit: MODEL.IInverterRountineByUnit, index: number) => {
+        const checkNumberValid = !!Number(
+          unit[`h${hourPicked}` as keyof MODEL.IInverterRountineByUnit],
+        );
+        if (unit.unitId === selectedUnit) {
+          idx = index === listUnit.length - 1 ? 0 : index + 1;
+          return {
+            ...unit,
+            [`h${hourPicked}`]: checkNumberValid
+              ? unit[`h${hourPicked}` as keyof MODEL.IInverterRountineByUnit]
+              : '',
+          };
+        }
+        return unit;
+      },
+    );
     setListUnit(units);
     setSelectedUnit(listUnit[idx].unitId);
-    handleScrollToFocus(idx);
+    handleScrollToElement(
+      scrollViewRef,
+      idx,
+      LABEL_TYPOGRAPHY_HEIGHT + LABEL_TYPOGRAPHY_MARGIN_BOT,
+    );
   };
 
   const { typeFilter, types = [] } = route.params;
@@ -159,21 +188,31 @@ const InverterRountine = ({ navigation, route }: ApplicationScreenProps) => {
               style={styles.routineContainer}
               contentContainerStyle={[Gutters.tinyPadding]}
             >
-              {listUnit.map((item, index) => {
-                return (
-                  <LabelTypography
-                    key={index}
-                    label={item.typeName}
-                    unit={item.unitName}
-                    value={item[`h${hourPicked}`]}
-                    isSelected={item.unitId === selectedUnit}
-                    onPress={() => {
-                      handleScrollToFocus(index);
-                      handleOnFocusUnitRoutine(item.unitId);
-                    }}
-                  />
-                );
-              })}
+              {listUnit.map(
+                (item: MODEL.IInverterRountineByUnit, index: number) => {
+                  return (
+                    <LabelTypography
+                      key={item.unitId}
+                      label={item.typeName}
+                      unit={item.unitName}
+                      value={
+                        item[
+                          `h${hourPicked}` as keyof MODEL.IInverterRountineByUnit
+                        ]
+                      }
+                      isSelected={item.unitId === selectedUnit}
+                      onPress={() => {
+                        handleScrollToElement(
+                          scrollViewRef,
+                          index,
+                          LABEL_TYPOGRAPHY_HEIGHT + LABEL_TYPOGRAPHY_MARGIN_BOT,
+                        );
+                        handleOnFocusUnitRoutine(item.unitId);
+                      }}
+                    />
+                  );
+                },
+              )}
               {selectedUnit !== '' && <View style={styles.wrapper} />}
             </ScrollView>
           </SafeAreaView>
