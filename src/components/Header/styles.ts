@@ -1,13 +1,23 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
+  container: {
+    backgroundColor: '#131B54',
+  },
   content: {
-    height: 44,
+    // height: 64,
     paddingHorizontal: 20,
-    backgroundColor: '#0c5d7be6',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 2
+    zIndex: 2,
+    width: '100%',
+  },
+  titleWrap: {
+    backgroundColor: '#131B54',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingBottom: 12,
   },
   backIcon: {
     width: 26,
@@ -18,13 +28,13 @@ export default StyleSheet.create({
   btnBack: {
     position: 'absolute',
     left: 20,
-    width: 48
+    width: 48,
   },
   title: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '500',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   largeTitle: {
     fontSize: 25,
@@ -62,6 +72,9 @@ export default StyleSheet.create({
   },
   rightText: {
     fontSize: 14,
-    color: "#ffffff",
-  }
+    color: '#ffffff',
+  },
+  customRenderContainer: {
+    paddingBottom: 12,
+  },
 });

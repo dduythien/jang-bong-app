@@ -9,6 +9,7 @@ import { useTheme } from '../hooks';
 import InitNavigatorStack from './Main';
 import NavigatorStack from './NavigatorStack';
 import { useFlipper } from '@react-navigation/devtools';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // @refresh reset
 const ApplicationNavigator = () => {
@@ -20,18 +21,17 @@ const ApplicationNavigator = () => {
   useFlipper(navigationRef);
 
   return (
-    <SafeAreaView style={[Layout.fill, { backgroundColor: colors.card }]}>
+    <SafeAreaProvider>
       <NavigationContainer theme={NavigationTheme} ref={navigationRef}>
-        <StatusBar
+        {/* <StatusBar
           barStyle="light-content"
           translucent
           backgroundColor="transparent"
-        />
-        <SafeAreaView style={{ backgroundColor: '#d31145', flex: 0 }} />
-        {/* <NavigatorStack /> */}
-        <InitNavigatorStack />
+        /> */}
+        {/* <SafeAreaView style={{ backgroundColor: '#d31145', flex: 0 }} /> */}
+        <NavigatorStack />
       </NavigationContainer>
-    </SafeAreaView>
+    </SafeAreaProvider>
   );
 };
 

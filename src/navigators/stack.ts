@@ -1,26 +1,33 @@
-import { Dashboard, Page2, Page3, Login } from '@/screens';
+import { Dashboard, Page2, Report, Login } from '@/screens';
+import { StackProps } from 'types/navigation';
 
-const rootStackConfig = {
+const rootStackConfig: StackProps = {
   login: {
     component: Login,
     options: {
       gestureEnabled: false,
+      headerTransparent: true,
+      headerShown: false,
     },
   },
-  Dashboard: {
+  dashboard: {
     component: Dashboard,
     options: {
       gestureEnabled: false,
+      headerTransparent: true,
+      headerShown: false,
+    },
+  },
+  report: {
+    component: Report,
+    options: {
+      gestureEnabled: false,
+      headerTransparent: true,
+      headerShown: false,
     },
   },
   page2: {
     component: Page2,
-    options: {
-      gestureEnabled: false,
-    },
-  },
-  page3: {
-    component: Page3,
     options: {
       gestureEnabled: false,
     },

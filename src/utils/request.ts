@@ -12,7 +12,7 @@ const request = axios.create({
 const handleError = (error: any) => {
   const response = error.response || {};
   const { data, status, statusText } = response;
-  return { data, status, statusText };
+  throw { data, status, statusText };
 };
 
 request.interceptors.request.use(async (config: any) => {

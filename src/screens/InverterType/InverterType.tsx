@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import {
   BottomSheetModal,
   BottomSheetModalProvider,
-  BottomSheetBackdrop
+  BottomSheetBackdrop,
   // BottomSheet
 } from '@gorhom/bottom-sheet';
 
@@ -113,7 +113,6 @@ const Inverter = ({ navigation }: ApplicationScreenProps) => {
           snapPoints={snapPoints}
           onChange={handleSheetChanges}
           backdropComponent={renderBackdrop}
-
         >
           <View style={styles.contentContainer}>
             <Text>Lựa chọn Nhóm thông số</Text>
@@ -130,12 +129,12 @@ const Inverter = ({ navigation }: ApplicationScreenProps) => {
                 />
                 <CardType
                   title="Thông số nhiệt độ Inverter"
-                  onPress={() => navigateInverterList(1, [1,3])}
+                  onPress={() => navigateInverterList(1, [1, 3])}
                   description="1 Giờ nhập 1 lần"
                 />
                 <CardType
                   title="Thông số vận hành Inverter"
-                  onPress={() => navigateInverterList(1, [4,5])}
+                  onPress={() => navigateInverterList(1, [4, 5])}
                   description="1 Giờ nhập 1 lần"
                 />
               </>

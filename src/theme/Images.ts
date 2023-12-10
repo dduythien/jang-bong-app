@@ -19,6 +19,7 @@ export default function ({}: ThemeVariables) {
     },
     bg: {
       login: require('./assets/images/login-bg.jpg'),
+      login2: require('./assets/images/login2-bg.jpg'),
     },
   };
 }
