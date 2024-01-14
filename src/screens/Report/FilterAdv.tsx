@@ -25,7 +25,7 @@ const listButton = [
   },
   {
     label: 'Tổng',
-    value: 3,
+    value: 0,
   },
 ];
 
@@ -130,9 +130,9 @@ const listYear = [
   },
 ];
 
-const FilterAdv = (props: KeyBoardProps) => {
+const FilterAdv = (props: any) => {
   const { onDismiss, bottomSheetModalRef } = props;
-  const snapPoints = useMemo(() => ['50%'], []);
+  const snapPoints = useMemo(() => ['55%'], []);
   const { Layout, Gutters, Images, Fonts } = useTheme();
 
   const renderBackdrop = useCallback(
@@ -147,7 +147,7 @@ const FilterAdv = (props: KeyBoardProps) => {
     [],
   );
 
-  const [period, setPeriod] = useState<number | string>(1);
+  const [period, setPeriod] = useState<number | string>(0);
   const [reportType, setReportType] = useState<number | string>('day');
   const [month, setMonth] = useState<number | string>('1');
   const [year, setYear] = useState<number | string>('2023');
@@ -162,6 +162,7 @@ const FilterAdv = (props: KeyBoardProps) => {
       backdropComponent={renderBackdrop}
     >
       <View style={styles.container}>
+        <Text style={styles.title}>Tuỳ chọn nâng cao</Text>
         <View style={Gutters.tinyBMargin}>
           <ButtonGroup
             label="Chọn loại"
@@ -187,7 +188,7 @@ const FilterAdv = (props: KeyBoardProps) => {
             setValue={(val: string | number) => setMonth(val)}
           />
         </View>
-        <View style={Gutters.smallBMargin}>
+        <View style={Gutters.regularBMargin}>
           <ButtonGroup
             label="Năm"
             listButton={listYear}
@@ -202,7 +203,7 @@ const FilterAdv = (props: KeyBoardProps) => {
             gap: 12,
           }}
         >
-          <ButtonFloat title="Xoá" type="secondary" />
+          <ButtonFloat title="Xoá" type="outline" />
           <ButtonFloat title="Tìm kiếm" />
         </View>
       </View>
@@ -214,15 +215,14 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 12,
   },
-
   icon: {
     textAlign: 'center',
   },
-
   title: {
     color: '#000000',
     textAlign: 'center',
     fontSize: 20,
+    paddingBottom: 12,
   },
 });
 

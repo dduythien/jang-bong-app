@@ -32,7 +32,12 @@ const REPORT_TYPE = {
   CHART: 2,
 };
 
-const Filter = () => {
+interface FilterProps {
+  filterReport: MODEL.IEnergyAuditReportParams;
+  setFilterReport: (data: any) => void;
+}
+
+const Filter = props => {
   const [reportType, setReportType] = useState(REPORT_TYPE.LINE);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 

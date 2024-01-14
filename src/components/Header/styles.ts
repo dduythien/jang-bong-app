@@ -29,6 +29,7 @@ export default StyleSheet.create({
     position: 'absolute',
     left: 20,
     width: 48,
+    top: 0,
   },
   title: {
     color: '#fff',

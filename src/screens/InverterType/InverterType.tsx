@@ -11,6 +11,8 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  SafeAreaView,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +27,7 @@ import _get from 'lodash/get';
 import { getListInverterService } from '@/services/inverter';
 import { useRequest } from 'ahooks';
 import { useTheme } from '../../hooks';
-import { InverterCard } from '@/components';
+import { Header, InverterCard } from '@/components';
 import { MODEL } from '../../../@types/model';
 import { ApplicationScreenProps } from '../../../@types/navigation';
 
@@ -42,7 +44,14 @@ const CardType = (props: ICardTypeProps) => {
     <View style={[styles.container]}>
       <TouchableOpacity onPress={onPress}>
         <View style={[Gutters.tinyPadding]}>
-          <Text style={[Fonts.textBold, Fonts.textSmall, Gutters.tinyBMargin]}>
+          <Text
+            style={[
+              Fonts.textBold,
+              Fonts.textSmall,
+              Gutters.tinyBMargin,
+              { color: '#FFF' },
+            ]}
+          >
             {title}
           </Text>
           <Text style={[Fonts.textTiny, Fonts.textLight]}>{description}</Text>
@@ -70,7 +79,7 @@ const Inverter = ({ navigation }: ApplicationScreenProps) => {
   };
 
   const navigateInverterList = (typeFilter: number, types: number[]) => {
-    navigation.navigate('Inverter', { typeFilter, types });
+    navigation.navigate('inverter', { typeFilter, types });
   };
 
   const renderBackdrop = useCallback(
@@ -81,96 +90,103 @@ const Inverter = ({ navigation }: ApplicationScreenProps) => {
   );
 
   return (
-    <>
-      <ScrollView
-        contentContainerStyle={[Layout.fullSize, Gutters.tinyPadding]}
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#131B54' }}>
+      <KeyboardAvoidingView
+        style={{ flex: 1, backgroundColor: '#fff' }}
+        behavior="padding"
+        keyboardVerticalOffset={0}
       >
-        <Text
-          style={[Fonts.textBold, Fonts.textRegular, Gutters.regularBMargin]}
+        <Header title="Báo cáo" />
+        <ScrollView
+        // contentContainerStyle={[Layout.fullSize, Gutters.tinyPadding]}
         >
-          Chọn Chu kỳ
-        </Text>
-        <CardType
-          title="Chu kỳ 1 Giờ"
-          onPress={() => onChooseType(1)}
-          description="1 Giờ nhập 1 lần"
-        />
-        <CardType
-          title="Chu kỳ 2 Giờ"
-          onPress={() => onChooseType(2)}
-          description="2 Giờ nhập 1 lần"
-        />
-        <CardType
-          title="Chu kỳ 1 và 7 ngày"
-          onPress={() => onChooseType(3)}
-          description="1 hoặc 7 ngày nhập 1 lần"
-        />
-      </ScrollView>
-      <BottomSheetModalProvider>
-        <BottomSheetModal
-          ref={bottomSheetModalRef}
-          index={1}
-          snapPoints={snapPoints}
-          onChange={handleSheetChanges}
-          backdropComponent={renderBackdrop}
-        >
-          <View style={styles.contentContainer}>
-            <Text>Lựa chọn Nhóm thông số</Text>
-          </View>
-          <ScrollView
-            contentContainerStyle={[Layout.fullSize, Gutters.tinyPadding]}
+          <Text
+            style={[Fonts.textBold, Fonts.textRegular, Gutters.regularBMargin]}
           >
-            {typePicked === 1 && (
-              <>
-                <CardType
-                  title="Thông số vận hành Nhà máy"
-                  onPress={() => navigateInverterList(1, [6])}
-                  description="1 Giờ nhập 1 lần"
-                />
-                <CardType
-                  title="Thông số nhiệt độ Inverter"
-                  onPress={() => navigateInverterList(1, [1, 3])}
-                  description="1 Giờ nhập 1 lần"
-                />
-                <CardType
-                  title="Thông số vận hành Inverter"
-                  onPress={() => navigateInverterList(1, [4, 5])}
-                  description="1 Giờ nhập 1 lần"
-                />
-              </>
-            )}
-            {typePicked === 2 && (
-              <>
-                <CardType
-                  title="Thông số vận hành tự dùng AD-DC"
-                  onPress={() => navigateInverterList(2, [1])}
-                  description="1 Giờ nhập 1 lần"
-                />
-                <CardType
-                  title="Hệ thống tự dùng 220 VDC"
-                  onPress={() => navigateInverterList(2, [2])}
-                  description="1 Giờ nhập 1 lần"
-                />
-              </>
-            )}
-            {typePicked === 3 && (
-              <>
-                <CardType
-                  title="LS9 và LS 10 chu kỳ 1 ngày"
-                  onPress={() => navigateInverterList(3, [8])}
-                  description="1 Giờ nhập 1 lần"
-                />
-                <CardType
-                  title="LS11 chu kỳ 7 ngày"
-                  onPress={() => navigateInverterList(3, [9])}
-                  description="1 Giờ nhập 1 lần"
-                />
-              </>
-            )}
-          </ScrollView>
-        </BottomSheetModal>
-      </BottomSheetModalProvider>
-    </>
+            Chọn Chu kỳ
+          </Text>
+          <CardType
+            title="Chu kỳ 1 Giờ"
+            onPress={() => onChooseType(1)}
+            description="1 Giờ nhập 1 lần"
+          />
+          <CardType
+            title="Chu kỳ 2 Giờ"
+            onPress={() => onChooseType(2)}
+            description="2 Giờ nhập 1 lần"
+          />
+          <CardType
+            title="Chu kỳ 1 và 7 ngày"
+            onPress={() => onChooseType(3)}
+            description="1 hoặc 7 ngày nhập 1 lần"
+          />
+        </ScrollView>
+        <BottomSheetModalProvider>
+          <BottomSheetModal
+            ref={bottomSheetModalRef}
+            index={1}
+            snapPoints={snapPoints}
+            onChange={handleSheetChanges}
+            backdropComponent={renderBackdrop}
+          >
+            <View style={styles.contentContainer}>
+              <Text>Lựa chọn Nhóm thông số</Text>
+            </View>
+            <ScrollView
+              contentContainerStyle={[Layout.fullSize, Gutters.tinyPadding]}
+            >
+              {typePicked === 1 && (
+                <>
+                  <CardType
+                    title="Thông số vận hành Nhà máy"
+                    onPress={() => navigateInverterList(1, [6])}
+                    description="1 Giờ nhập 1 lần"
+                  />
+                  <CardType
+                    title="Thông số nhiệt độ Inverter"
+                    onPress={() => navigateInverterList(1, [1, 3])}
+                    description="1 Giờ nhập 1 lần"
+                  />
+                  <CardType
+                    title="Thông số vận hành Inverter"
+                    onPress={() => navigateInverterList(1, [4, 5])}
+                    description="1 Giờ nhập 1 lần"
+                  />
+                </>
+              )}
+              {typePicked === 2 && (
+                <>
+                  <CardType
+                    title="Thông số vận hành tự dùng AD-DC"
+                    onPress={() => navigateInverterList(2, [1])}
+                    description="1 Giờ nhập 1 lần"
+                  />
+                  <CardType
+                    title="Hệ thống tự dùng 220 VDC"
+                    onPress={() => navigateInverterList(2, [2])}
+                    description="1 Giờ nhập 1 lần"
+                  />
+                </>
+              )}
+              {typePicked === 3 && (
+                <>
+                  <CardType
+                    title="LS9 và LS 10 chu kỳ 1 ngày"
+                    onPress={() => navigateInverterList(3, [8])}
+                    description="1 Giờ nhập 1 lần"
+                  />
+                  <CardType
+                    title="LS11 chu kỳ 7 ngày"
+                    onPress={() => navigateInverterList(3, [9])}
+                    description="1 Giờ nhập 1 lần"
+                  />
+                </>
+              )}
+            </ScrollView>
+          </BottomSheetModal>
+        </BottomSheetModalProvider>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
@@ -190,7 +206,7 @@ const styles = StyleSheet.create({
 
     elevation: 5,
 
-    backgroundColor: 'white',
+    backgroundColor: '#131b54',
     marginBottom: 16,
   },
   contentContainer: {

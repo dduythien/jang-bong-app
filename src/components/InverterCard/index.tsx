@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 
 interface IInveterProps {
   info: MODEL.IItemInverter;
-  onClick: (id: string) => void;
+  onClick: (info: MODEL.IItemInverter) => void;
 }
 
 const InverterCard = (props: IInveterProps) => {
@@ -40,7 +40,7 @@ const InverterCard = (props: IInveterProps) => {
 
   return (
     <View style={[styles.container, Gutters.tinyBMargin]}>
-      <TouchableOpacity onPress={() => onClick(info.inverterId || '')}>
+      <TouchableOpacity onPress={() => onClick(info)}>
         <View style={[Gutters.tinyPadding]}>
           <Text style={[Fonts.textTiny, Fonts.textLight]}>Thông số</Text>
         </View>

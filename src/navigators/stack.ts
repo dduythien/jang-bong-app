@@ -1,4 +1,10 @@
-import { Dashboard, Page2, Report, Login } from '@/screens';
+import {
+  Dashboard,
+  Inverter,
+  Report,
+  Login,
+  InverterRountine,
+} from '@/screens';
 import { StackProps } from 'types/navigation';
 
 const rootStackConfig: StackProps = {
@@ -26,10 +32,20 @@ const rootStackConfig: StackProps = {
       headerShown: false,
     },
   },
-  page2: {
-    component: Page2,
+  inverter: {
+    component: Inverter,
     options: {
       gestureEnabled: false,
+      headerTransparent: true,
+      headerShown: false,
+    },
+  },
+  inverterRountine: {
+    component: InverterRountine,
+    options: {
+      gestureEnabled: false,
+      headerTransparent: true,
+      headerShown: false,
     },
   },
 };

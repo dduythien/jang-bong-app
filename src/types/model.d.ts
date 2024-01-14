@@ -27,4 +27,16 @@ declare namespace MODEL {
     listButton: IListButtonButtonGroup[];
     label: string;
   }
+
+  export interface IEnergyAuditReportParams {
+    month: string;
+    reportType: string;
+    year: string;
+    period: number;
+  }
+
+  export interface IEnergyAuditReport {
+    colX: string;
+    dataX: number;
+  }
 }

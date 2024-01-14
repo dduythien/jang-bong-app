@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   // Text,
@@ -8,6 +8,8 @@ import {
   TouchableWithoutFeedback,
   StyleSheet,
   Dimensions,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import type { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { useForm } from 'react-hook-form';
@@ -18,9 +20,10 @@ import dayjs from 'dayjs';
 import { useTheme } from '../../hooks';
 import { MODEL } from '../../../@types/model';
 import { ApplicationScreenProps } from '../../../@types/navigation';
-import { Header } from '@/components';
+import { Header, ButtonFloat } from '@/components';
 import Keyboard from '@/components/Keyboard';
 import LabelTypography from '@/components/LabelTypography';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 const InverterRountine = ({ navigation, route }: ApplicationScreenProps) => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -29,9 +32,9 @@ const InverterRountine = ({ navigation, route }: ApplicationScreenProps) => {
   const form = useForm({});
   // const { control, setValue } = form;
   // variables
-  const { Gutters } = useTheme();
+  const { Gutters, Layout } = useTheme();
   // const dispatch = useDispatch();
-  const [hourPicked] = useState(9);
+  const [hourPicked, setHourPicked] = useState(0);
   const [selectedUnit, setSelectedUnit] = useState<string>('');
   const [listUnit, setListUnit] = useState<MODEL.IInverterRountineByUnit[]>([]);
 
@@ -135,65 +138,104 @@ const InverterRountine = ({ navigation, route }: ApplicationScreenProps) => {
     handleScrollToFocus(idx);
   };
 
-  const { typeFilter, types = [] } = route.params;
+  const {
+    typeFilter,
+    types = [],
+    inverterName,
+    hourPicked: hourPickedParmams,
+  } = route.params;
+  console.log(route.params);
+  useEffect(() => {
+    setHourPicked(hourPickedParmams);
+  }, [hourPickedParmams]);
+
   return (
-    <View style={styles.container}>
-      <TouchableWithoutFeedback
-        onPress={() => {
-          bottomSheetModalRef.current?.close();
-        }}
-      >
-        <View>
-          <StatusBar barStyle="dark-content" />
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: '#131B54',
+        paddingTop: Platform.OS === 'android' ? 24 : 0,
+      }}
+    >
+      <BottomSheetModalProvider>
+        <KeyboardAvoidingView
+          style={{ flex: 1, backgroundColor: '#fff' }}
+          behavior="padding"
+          keyboardVerticalOffset={0}
+        >
           <Header
-            title={'Nhập liệu'}
-            isHasFirstIconRight
-            iconNameFirstRight="info"
-            onPressBack={() =>
-              navigation.navigate('Inverter', { typeFilter, types })
-            }
+            title={`${inverterName} (${hourPickedParmams}:00)`}
+            onPressBack={() => navigation.goBack()}
           />
-          <SafeAreaView>
-            <ScrollView
-              ref={scrollViewRef}
-              style={styles.routineContainer}
-              contentContainerStyle={[Gutters.tinyPadding]}
+          <View style={styles.container}>
+            <TouchableWithoutFeedback
+              onPress={() => {
+                bottomSheetModalRef.current?.close();
+              }}
             >
-              {listUnit.map((item, index) => {
-                return (
-                  <LabelTypography
-                    key={index}
-                    label={item.typeName}
-                    unit={item.unitName}
-                    value={item[`h${hourPicked}`]}
-                    isSelected={item.unitId === selectedUnit}
-                    onPress={() => {
-                      handleScrollToFocus(index);
-                      handleOnFocusUnitRoutine(item.unitId);
-                    }}
-                  />
-                );
-              })}
-              {selectedUnit !== '' && <View style={styles.wrapper} />}
-            </ScrollView>
-          </SafeAreaView>
-        </View>
-      </TouchableWithoutFeedback>
-      <Keyboard
-        bottomSheetModalRef={bottomSheetModalRef}
-        setValue={handleSetValue}
-        deleteValue={handleDeleteValue}
-        clearValue={handleClearValue}
-        nextValue={handleNextValue}
-        onDismiss={handleDismiss}
-      />
-    </View>
+              <>
+                <SafeAreaView>
+                  <ScrollView
+                    ref={scrollViewRef}
+                    // style={styles.routineContainer}
+                    contentContainerStyle={[
+                      Layout.colCenter,
+                      Gutters.tinyPadding,
+                      { paddingBottom: 42 },
+                    ]}
+                  >
+                    {listUnit.map((item, index) => {
+                      return (
+                        <LabelTypography
+                          key={index}
+                          label={item.typeName}
+                          unit={item.unitName}
+                          value={item[`h${hourPicked}`]}
+                          isSelected={item.unitId === selectedUnit}
+                          onPress={() => {
+                            handleScrollToFocus(index);
+                            handleOnFocusUnitRoutine(item.unitId);
+                          }}
+                        />
+                      );
+                    })}
+                    {selectedUnit !== '' && <View style={styles.wrapper} />}
+                    <View
+                      style={{
+                        // position: 'absolute',
+                        // bottom: 1,
+                        width: '100%',
+                        // padding: 12,
+                      }}
+                    >
+                      <ButtonFloat
+                        title="Lưu"
+                        onPress={() => console.log(listUnit)}
+                      />
+                    </View>
+                  </ScrollView>
+                </SafeAreaView>
+              </>
+            </TouchableWithoutFeedback>
+            <Keyboard
+              bottomSheetModalRef={bottomSheetModalRef}
+              setValue={handleSetValue}
+              deleteValue={handleDeleteValue}
+              clearValue={handleClearValue}
+              nextValue={handleNextValue}
+              onDismiss={handleDismiss}
+            />
+          </View>
+        </KeyboardAvoidingView>
+      </BottomSheetModalProvider>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     height: '100%',
+    backgroundColor: '#fff',
   },
 
   routineContainer: {
@@ -201,6 +243,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     height: '100%',
     overflow: 'scroll',
+    paddingBottom: 24,
   },
 
   wrapper: {

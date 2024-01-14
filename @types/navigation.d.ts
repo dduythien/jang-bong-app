@@ -30,6 +30,7 @@ export type StackComponent = {
 export type StackProps = {
   login: StackComponent;
   dashboard: StackComponent;
-  page2: StackComponent;
+  inverter: StackComponent;
   report: StackComponent;
+  inverterRountine: StackComponent;
 };

@@ -58,120 +58,120 @@ const Keyboard = (props: KeyBoardProps) => {
   const snapPoints = useMemo(() => ['40%'], []);
 
   return (
-    <BottomSheetModalProvider>
-      <BottomSheetModal
-        ref={bottomSheetModalRef}
-        snapPoints={snapPoints}
-        onDismiss={onDismiss}
-        enableOverDrag={false}
-        // enablePanDownToClose={false}
-        enableDismissOnClose={true}
-      >
-        <View style={styles.contentContainer}>
-          <View style={styles.row}>
-            <KeyboardButton
-              title="7"
-              onPress={() => {
-                setValue('7');
-              }}
-            />
-            <KeyboardButton
-              title="8"
-              onPress={() => {
-                setValue('8');
-              }}
-            />
-            <KeyboardButton
-              title="9"
-              onPress={() => {
-                setValue('9');
-              }}
-            />
-            <KeyboardButton title="AC" color="#d8d8d8" onPress={clearValue} />
-          </View>
-          <View style={styles.row}>
-            <KeyboardButton
-              title="4"
-              onPress={() => {
-                setValue('4');
-              }}
-            />
-            <KeyboardButton
-              title="5"
-              onPress={() => {
-                setValue('5');
-              }}
-            />
-            <KeyboardButton
-              title="6"
-              onPress={() => {
-                setValue('6');
-              }}
-            />
-            <KeyboardButton
-              title={
-                <Icon2 style={stylesBtn.icon} name="delete-left" size={22} />
-              }
-              isIcon
-              color="#d8d8d8"
-              onPress={deleteValue}
-            />
-          </View>
-          <View style={styles.rowContainer}>
-            <View style={styles.nextRowContainer}>
-              <View style={styles.nextRow}>
-                <KeyboardButton
-                  title="1"
-                  onPress={() => {
-                    setValue('1');
-                  }}
-                />
-                <KeyboardButton
-                  title="2"
-                  onPress={() => {
-                    setValue('2');
-                  }}
-                />
-                <KeyboardButton
-                  title="3"
-                  onPress={() => {
-                    setValue('3');
-                  }}
-                />
-              </View>
-              <View style={styles.nextRow}>
-                <KeyboardButton
-                  title="-"
-                  onPress={() => {
-                    setValue('-');
-                  }}
-                />
-                <KeyboardButton
-                  title="0"
-                  onPress={() => {
-                    setValue('0');
-                  }}
-                />
-                <KeyboardButton
-                  title="."
-                  onPress={() => {
-                    setValue('.');
-                  }}
-                />
-              </View>
-            </View>
-            <View style={styles.nextRowBtnWrapper}>
+    // <BottomSheetModalProvider>
+    <BottomSheetModal
+      ref={bottomSheetModalRef}
+      snapPoints={snapPoints}
+      onDismiss={onDismiss}
+      enableOverDrag={false}
+      // enablePanDownToClose={false}
+      enableDismissOnClose={true}
+    >
+      <View style={styles.contentContainer}>
+        <View style={styles.row}>
+          <KeyboardButton
+            title="7"
+            onPress={() => {
+              setValue('7');
+            }}
+          />
+          <KeyboardButton
+            title="8"
+            onPress={() => {
+              setValue('8');
+            }}
+          />
+          <KeyboardButton
+            title="9"
+            onPress={() => {
+              setValue('9');
+            }}
+          />
+          <KeyboardButton title="AC" color="#d8d8d8" onPress={clearValue} />
+        </View>
+        <View style={styles.row}>
+          <KeyboardButton
+            title="4"
+            onPress={() => {
+              setValue('4');
+            }}
+          />
+          <KeyboardButton
+            title="5"
+            onPress={() => {
+              setValue('5');
+            }}
+          />
+          <KeyboardButton
+            title="6"
+            onPress={() => {
+              setValue('6');
+            }}
+          />
+          <KeyboardButton
+            title={
+              <Icon2 style={stylesBtn.icon} name="delete-left" size={22} />
+            }
+            isIcon
+            color="#d8d8d8"
+            onPress={deleteValue}
+          />
+        </View>
+        <View style={styles.rowContainer}>
+          <View style={styles.nextRowContainer}>
+            <View style={styles.nextRow}>
               <KeyboardButton
-                title={<Icon style={stylesBtn.icon} name="enter" size={22} />}
-                isIcon
-                color="#d8d8d8"
-                onPress={nextValue}
+                title="1"
+                onPress={() => {
+                  setValue('1');
+                }}
+              />
+              <KeyboardButton
+                title="2"
+                onPress={() => {
+                  setValue('2');
+                }}
+              />
+              <KeyboardButton
+                title="3"
+                onPress={() => {
+                  setValue('3');
+                }}
+              />
+            </View>
+            <View style={styles.nextRow}>
+              <KeyboardButton
+                title="-"
+                onPress={() => {
+                  setValue('-');
+                }}
+              />
+              <KeyboardButton
+                title="0"
+                onPress={() => {
+                  setValue('0');
+                }}
+              />
+              <KeyboardButton
+                title="."
+                onPress={() => {
+                  setValue('.');
+                }}
               />
             </View>
           </View>
+          <View style={styles.nextRowBtnWrapper}>
+            <KeyboardButton
+              title={<Icon style={stylesBtn.icon} name="enter" size={22} />}
+              isIcon
+              color="#d8d8d8"
+              onPress={nextValue}
+            />
+          </View>
         </View>
-      </BottomSheetModal>
-    </BottomSheetModalProvider>
+      </View>
+    </BottomSheetModal>
+    // </BottomSheetModalProvider>
   );
 };
 

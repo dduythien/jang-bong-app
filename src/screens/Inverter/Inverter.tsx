@@ -1,5 +1,12 @@
 import React, { useEffect, useRef, useCallback, useMemo } from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  SafeAreaView,
+  KeyboardAvoidingView,
+} from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import {
@@ -15,6 +22,7 @@ import { useTheme } from '../../hooks';
 import { InverterCard, Header } from '@/components';
 import { MODEL } from '../../../@types/model';
 import { ApplicationScreenProps } from '../../../@types/navigation';
+import dayjs from 'dayjs';
 
 const Inverter = ({ navigation, route }: ApplicationScreenProps) => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -57,40 +65,50 @@ const Inverter = ({ navigation, route }: ApplicationScreenProps) => {
 
   const { typeFilter, types = [] } = route.params;
 
-  const onSelectInverter = (inverterId: string) => {
+  const onSelectInverter = (info: MODEL.IItemInverter) => {
     // bottomSheetModalRef.current?.present();
-    navigation.navigate('InputInverter', { inverterId, typeFilter, types });
+    const hourPicked = dayjs().hour();
+    navigation.navigate('inverterRountine', {
+      inverterId: info.inverterId,
+      typeFilter,
+      types,
+      hourPicked,
+      inverterName: info.inverterName,
+    });
   };
 
   return (
-    <>
-      <Header
-        title={'Nhập l'}
-        isHasFirstIconRight
-        iconNameFirstRight="info"
-        onPressBack={() => navigation.navigate('InverterType')}
-      />
-      <ScrollView
-        // style={Layout.fill}
-        contentContainerStyle={[
-          // Layout.fullSize,
-          // Layout.fill,
-          Layout.colCenter,
-          // Layout.scrollSpaceBetween,
-          Gutters.tinyPadding,
-        ]}
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#131B54' }}>
+      <KeyboardAvoidingView
+        style={{ flex: 1, backgroundColor: '#fff' }}
+        behavior="padding"
+        keyboardVerticalOffset={0}
       >
-        {filterInverter(listInverter, types, typeFilter).map(
-          (inverterInfo: MODEL.IItemInverter, index) => (
-            <InverterCard
-              key={index}
-              info={inverterInfo}
-              onClick={onSelectInverter}
-            />
-          ),
-        )}
-      </ScrollView>
-    </>
+        <Header title="Danh sách" onPressBack={() => navigation.goBack()} />
+        <ScrollView
+          contentContainerStyle={[Layout.colCenter, Gutters.tinyPadding]}
+        >
+          {filterInverter(listInverter, types, typeFilter).map(
+            (inverterInfo: MODEL.IItemInverter, index) => (
+              <InverterCard
+                key={index}
+                info={inverterInfo}
+                onClick={onSelectInverter}
+              />
+            ),
+          )}
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+    // <>
+    //   <Header
+    //     title={'Nhập l'}
+    //     isHasFirstIconRight
+    //     iconNameFirstRight="info"
+    //     onPressBack={() => navigation.navigate('InverterType')}
+    //   />
+
+    // </>
   );
 };
 
