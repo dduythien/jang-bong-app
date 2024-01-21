@@ -97,9 +97,7 @@ const Inverter = ({ navigation }: ApplicationScreenProps) => {
         keyboardVerticalOffset={0}
       >
         <Header title="Báo cáo" />
-        <ScrollView
-        // contentContainerStyle={[Layout.fullSize, Gutters.tinyPadding]}
-        >
+        <ScrollView style={[Gutters.tinyPadding]}>
           <Text
             style={[Fonts.textBold, Fonts.textRegular, Gutters.regularBMargin]}
           >

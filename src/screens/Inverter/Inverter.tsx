@@ -100,15 +100,6 @@ const Inverter = ({ navigation, route }: ApplicationScreenProps) => {
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
-    // <>
-    //   <Header
-    //     title={'Nhập l'}
-    //     isHasFirstIconRight
-    //     iconNameFirstRight="info"
-    //     onPressBack={() => navigation.navigate('InverterType')}
-    //   />
-
-    // </>
   );
 };
 
