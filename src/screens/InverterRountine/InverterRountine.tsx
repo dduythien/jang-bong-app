@@ -10,11 +10,15 @@ import {
   Dimensions,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from 'react-native';
 import type { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { useForm } from 'react-hook-form';
 import _get from 'lodash/get';
-import { getInverterRoutineService } from '@/services/inverter';
+import {
+  getInverterRoutineService,
+  updateInverterRoutineService,
+} from '@/services/inverter';
 import { useMount, useRequest } from 'ahooks';
 import dayjs from 'dayjs';
 import { useTheme } from '../../hooks';
@@ -36,6 +40,7 @@ const InverterRountine = ({ navigation, route }: ApplicationScreenProps) => {
   // const dispatch = useDispatch();
   const [hourPicked, setHourPicked] = useState(0);
   const [selectedUnit, setSelectedUnit] = useState<string>('');
+  const [inverterRoutineId, setInverterRoutineId] = useState<string>('');
   const [listUnit, setListUnit] = useState<MODEL.IInverterRountineByUnit[]>([]);
 
   const { run } = useRequest(
@@ -45,6 +50,7 @@ const InverterRountine = ({ navigation, route }: ApplicationScreenProps) => {
         const routine = _get(data, 'data.unitRoutines');
         form.setValue('unitRoutines', routine);
         setListUnit(routine);
+        setInverterRoutineId(data?.data?.inverterRoutineId);
       },
       manual: true,
     },
@@ -75,7 +81,9 @@ const InverterRountine = ({ navigation, route }: ApplicationScreenProps) => {
   const handleSetValue = (val: string) => {
     const units = listUnit.map(unit => {
       if (unit.unitId === selectedUnit) {
-        return { ...unit, [`h${hourPicked}`]: unit[`h${hourPicked}`] + val };
+        const currentValue =
+          unit[`h${hourPicked}` as keyof MODEL.IInverterRountineByUnit] || '';
+        return { ...unit, [`h${hourPicked}`]: currentValue + val };
       }
       return unit;
     });
@@ -149,6 +157,33 @@ const InverterRountine = ({ navigation, route }: ApplicationScreenProps) => {
     setHourPicked(hourPickedParmams);
   }, [hourPickedParmams]);
 
+  const onSubmitRoutine = () => {
+    const payload = {
+      unitRoutines: listUnit,
+      inverterRoutineId: inverterRoutineId,
+    };
+    submitRoutine(payload);
+  };
+
+  const { run: submitRoutine } = useRequest(
+    (params: MODEL.IUpdateInverterRoutineParams) =>
+      updateInverterRoutineService(params),
+    {
+      onSuccess(data) {
+        if (data) {
+          Alert.alert('Thông báo', 'Cập nhật thành công', [
+            {
+              text: 'Đóng',
+              onPress: () => navigation.goBack(),
+              style: 'default',
+            },
+          ]);
+        }
+      },
+      manual: true,
+    },
+  );
+
   return (
     <SafeAreaView
       style={{
@@ -208,10 +243,7 @@ const InverterRountine = ({ navigation, route }: ApplicationScreenProps) => {
                         // padding: 12,
                       }}
                     >
-                      <ButtonFloat
-                        title="Lưu"
-                        onPress={() => console.log(listUnit)}
-                      />
+                      <ButtonFloat title="Lưu" onPress={onSubmitRoutine} />
                     </View>
                   </ScrollView>
                 </SafeAreaView>

@@ -106,4 +106,20 @@ export namespace MODEL {
     typeName: string;
     updateOn: string;
   }
+
+  export interface IInverterRountineDetail {
+    unitRoutines: IInverterRountineByUnit[];
+    createdOn: string;
+    inverterId: string;
+    inverterName: string;
+    inverterRoutineId: string;
+    type: string;
+    typeName: string;
+    updateOn: string;
+  }
+
+  export interface IUpdateInverterRoutineParams {
+    inverterRoutineId: string;
+    unitRoutines: IInverterRountineByUnit[];
+  }
 }

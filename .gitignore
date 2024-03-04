@@ -33,7 +33,10 @@ local.properties
 .cxx/
 *.keystore
 !debug.keystore
-
+.idea
+.gradle
+local.properties
+*.iml
 # node.js
 #
 node_modules/
